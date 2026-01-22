@@ -26,15 +26,6 @@ Eth-Challenge/
 │           └── datasources/
 │               └── datasource.yml  # Prometheus datasource config
 │
-├── data/                       # Persistent data volumes (created at runtime)
-│   ├── geth/                  # Geth blockchain data (~14-16TB when synced)
-│   │   ├── geth/              # Chain data, state trie, etc.
-│   │   ├── jwt.hex            # JWT secret for execution/consensus communication
-│   │   └── keystore/          # Account keystores (if any)
-│   ├── prysm/                 # Prysm beacon chain data
-│   │   └── beaconchaindata/   # Beacon chain database
-│   ├── prometheus/            # Prometheus metrics storage
-│   └── grafana/               # Grafana dashboards and settings
 │
 └── docs/                       # Additional documentation
     ├── OPERATIONAL_PLAN_PRD.md # Production deployment plan
