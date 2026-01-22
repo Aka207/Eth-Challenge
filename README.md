@@ -45,22 +45,22 @@ curl -X POST -H "Content-Type: application/json" \
    - **Geth Dashboard** (Execution Layer metrics)
    - **Prysm Validator Dashboard** (Consensus Layer metrics)
 
-## Inspecting Archive Queries
+# Inspecting Archive Queries
 
-# Query historical state at specific block
+## Query historical state at specific block
 ```bash
 curl -X POST http://localhost:8545 \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","method":"eth_getBalance","params":["0x...", "0x1000"],"id":1}'
 ```
-# Verify archive mode (should return full history)
+## Verify archive mode (should return full history)
 ```bash
 curl -X POST http://localhost:8545 \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","method":"eth_getBlockByNumber","params":["0x1", true],"id":1}'
 ```
 ---
-## References & Inspiration
+# References & Inspiration
 
 *   [Google SRE Book](https://sre.google/sre-book/) - SLOs, error budgets, on-call practices
 *   [Ethereum Archive Node Guide](https://www.cherryservers.com/blog/ethereum-archive-node) - Hardware benchmarks
