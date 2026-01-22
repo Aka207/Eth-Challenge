@@ -8,12 +8,7 @@ scrape_configs:
     static_configs:
       - targets: ['geth:6060']
 
-  - job_name: 'beacon'
+  - job_name: 'prysm'
     scrape_interval: 5s
     static_configs:
-      - targets: ['beacon:8080']
-
-  - job_name: 'validator'
-    scrape_interval: 5s
-    static_configs:
-      - targets: ['validator:8081']
+      - targets: ['prysm:8080']
