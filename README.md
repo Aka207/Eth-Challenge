@@ -124,35 +124,6 @@ graph TB
     style G fill:#4caf50
 ```
 
-### Node Type Comparison
-
-```mermaid
-graph LR
-    subgraph "Regular Node"
-        A1[Recent Blocks Only<br/>~128 blocks]
-        A2[Fast Sync Mode]
-        A3[Limited History]
-    end
-    
-    subgraph "Archive Node"
-        B1[All Blocks<br/>Genesis to Latest]
-        B2[Full State History]
-        B3[Complete History]
-    end
-    
-    A1 -->|Query Block 15M| A4[❌ Error:<br/>State Not Available]
-    B1 -->|Query Block 15M| B4[✅ Instant Result]
-    
-    style A1 fill:#ffcdd2
-    style A2 fill:#ffcdd2
-    style A3 fill:#ffcdd2
-    style A4 fill:#f44336,color:#fff
-    style B1 fill:#c8e6c9
-    style B2 fill:#c8e6c9
-    style B3 fill:#c8e6c9
-    style B4 fill:#4caf50,color:#fff
-```
-
 ## Step 1: Check Available Blocks
 
 Before querying historical blocks, check what blocks are available in your node:
