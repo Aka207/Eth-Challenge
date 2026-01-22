@@ -48,22 +48,19 @@ curl -X POST -H "Content-Type: application/json" \
 ## Inspecting Archive Queries
 
 # Query historical state at specific block
+```bash
 curl -X POST http://localhost:8545 \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","method":"eth_getBalance","params":["0x...", "0x1000"],"id":1}'
-
+```
 # Verify archive mode (should return full history)
+```bash
 curl -X POST http://localhost:8545 \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","method":"eth_getBlockByNumber","params":["0x1", true],"id":1}'
-
-## ⚡ Next Steps
-
-1. **Run locally**: `docker-compose up -d` and explore the monitoring dashboards
-2. **Read the ops plan**: [docs/OPERATIONAL_PLAN.md](./docs/OPERATIONAL_PLAN.md)
-
+```
 ---
-## 📚 References & Inspiration
+## References & Inspiration
 
 *   [Google SRE Book](https://sre.google/sre-book/) - SLOs, error budgets, on-call practices
 *   [Ethereum Archive Node Guide](https://www.cherryservers.com/blog/ethereum-archive-node) - Hardware benchmarks
