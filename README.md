@@ -67,6 +67,3 @@ curl -X POST http://localhost:8545 \
 *   [Geth Documentation](https://geth.ethereum.org/docs) - Official Geth docs
 *   [Lighthouse Book](https://lighthouse-book.sigmaprime.io/) - Lighthouse consensus client
 *   [Azure Well-Architected Framework](https://learn.microsoft.com/en-us/azure/architecture/) - Best practices for Azure
-
-
-**Ready to build production-grade blockchain infrastructure?** Let's go. 🚀
