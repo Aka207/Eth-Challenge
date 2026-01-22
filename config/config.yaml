@@ -24,7 +24,9 @@ DENEB_FORK_EPOCH: 0
 
 # Time parameters
 # ---------------------------------------------------------------
-SECONDS_PER_SLOT: 12
+# Reduced to 2 seconds for faster block production during testing
+# Set to 12 for production-like behavior
+SECONDS_PER_SLOT: 2
 SLOTS_PER_EPOCH: 32
 
 # Deposit contract
