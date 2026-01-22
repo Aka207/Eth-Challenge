@@ -7,6 +7,45 @@ This repository demonstrates both **local development** of an Ethereum Archive N
 ## Ethereum Mainnet Archive Node
 
 This setup runs a full Ethereum mainnet archive node with complete historical data access.
+## Repository Structure
+
+```
+Eth-Challenge/
+├── docker-compose.yml          # Main orchestration file for all services
+├── README.md                   # This file - project documentation
+│
+├── config/                     # Configuration files
+│   ├── config.toml            # Geth execution client configuration
+│   ├── prometheus.yml         # Prometheus monitoring configuration
+│   └── grafana/
+│       └── provisioning/
+│           ├── dashboards/    # Auto-provisioned Grafana dashboards
+│           │   ├── dashboard.yml
+│           │   ├── geth.json  # Geth metrics dashboard
+│           │   └── prysm.json # Prysm consensus layer dashboard
+│           └── datasources/
+│               └── datasource.yml  # Prometheus datasource config
+│
+├── data/                       # Persistent data volumes (created at runtime)
+│   ├── geth/                  # Geth blockchain data (~14-16TB when synced)
+│   │   ├── geth/              # Chain data, state trie, etc.
+│   │   ├── jwt.hex            # JWT secret for execution/consensus communication
+│   │   └── keystore/          # Account keystores (if any)
+│   ├── prysm/                 # Prysm beacon chain data
+│   │   └── beaconchaindata/   # Beacon chain database
+│   ├── prometheus/            # Prometheus metrics storage
+│   └── grafana/               # Grafana dashboards and settings
+│
+└── docs/                       # Additional documentation
+    ├── OPERATIONAL_PLAN_PRD.md # Production deployment plan
+    └── SRE_PERSPECTIVE.md      # SRE best practices and runbooks
+```
+
+**Key Files:**
+*   `docker-compose.yml` - Defines all services (Geth, Prysm, Prometheus, Grafana)
+*   `config/config.toml` - Geth archive node configuration
+*   `config/grafana/provisioning/` - Auto-provisioned Grafana dashboards (no manual setup needed)
+*   `data/` - All persistent data (blockchain, databases, metrics) - **excluded from git**
 
 ### Tech Stack
 *   **Execution Client**: [Geth](https://geth.ethereum.org/) (Archive Mode, Full Sync)
@@ -41,18 +80,18 @@ docker-compose logs -f prysm
 *   **Monitor sync progress** using `eth_syncing` JSON-RPC call
 *   The node will be fully functional once synced, but queries work during sync
 
+
+
 **Test the Node:**
 
 *Check Sync Status:*
 ```bash
-# Linux/Mac
 curl -X POST -H "Content-Type: application/json" --data '{"jsonrpc":"2.0","method":"eth_syncing","params":[],"id":1}' http://localhost:8545
-
-# Windows PowerShell
+```
+*Windows PowerShell*
+```bash
 Invoke-RestMethod -Uri http://localhost:8545 -Method POST -ContentType "application/json" -Body '{"jsonrpc":"2.0","method":"eth_syncing","params":[],"id":1}'
 ```
-
-*Note: The result is returned in hex format (wei). To convert to ETH, divide by 10^18.*
 
 **Monitoring Dashboard:**
 1. Open Grafana at [http://localhost:3000](http://localhost:3000) (admin/admin)
@@ -116,14 +155,13 @@ Before querying historical blocks, check what blocks are available in your node:
 ### Option B: Query Current Block via JSON-RPC
 
 *Linux/Mac (bash):*
+*Get the current latest block number*
 ```bash
-# Get the current latest block number
 curl -X POST http://localhost:8545 -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}'
 ```
 
 *Windows PowerShell:*
 ```powershell
-# Get the current latest block number
 Invoke-RestMethod -Uri http://localhost:8545 -Method POST -ContentType "application/json" -Body '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}'
 ```
 
@@ -138,20 +176,22 @@ Once you know your available block range, query historical state. **Replace `BLO
 **What was the ETH balance of account `0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045` at a specific block?**
 
 *Linux/Mac (bash):*
+*Replace BLOCK_NUMBER with a hex block number (e.g., "0x1000" for block 4096, or "latest" for current)*
 ```bash
-# Replace BLOCK_NUMBER with a hex block number (e.g., "0x1000" for block 4096, or "latest" for current)
 curl -X POST http://localhost:8545 -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"eth_getBalance","params":["0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045", "latest"],"id":1}'
-
-# Query a specific historical block (example: block 1000 = 0x3e8)
+```
+*Query a specific historical block (example: block 1000 = 0x3e8)*
+```bash
 curl -X POST http://localhost:8545 -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"eth_getBalance","params":["0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045", "0x3e8"],"id":1}'
 ```
 
 *Windows PowerShell:*
+*Replace BLOCK_NUMBER with a hex block number or use "latest" for current*
 ```powershell
-# Replace BLOCK_NUMBER with a hex block number or use "latest" for current
 Invoke-RestMethod -Uri http://localhost:8545 -Method POST -ContentType "application/json" -Body '{"jsonrpc":"2.0","method":"eth_getBalance","params":["0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045", "latest"],"id":1}'
-
-# Query a specific historical block (example: block 1000 = 0x3e8)
+```
+*Query a specific historical block (example: block 1000 = 0x3e8)*
+```powershell
 Invoke-RestMethod -Uri http://localhost:8545 -Method POST -ContentType "application/json" -Body '{"jsonrpc":"2.0","method":"eth_getBalance","params":["0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045", "0x3e8"],"id":1}'
 ```
 
@@ -163,20 +203,22 @@ Invoke-RestMethod -Uri http://localhost:8545 -Method POST -ContentType "applicat
 Query any block from your synced range to verify archive mode is working:
 
 *Linux/Mac (bash):*
+*Query a specific block (replace 0x3e8 with a block number from your synced range)*
 ```bash
-# Query a specific block (replace 0x3e8 with a block number from your synced range)
 curl -X POST http://localhost:8545 -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"eth_getBlockByNumber","params":["0x3e8", true],"id":1}'
-
-# Query genesis block (always available)
+```
+*Query genesis block (always available)*
+```bash
 curl -X POST http://localhost:8545 -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"eth_getBlockByNumber","params":["0x0", true],"id":1}'
 ```
 
 *Windows PowerShell:*
-```powershell
-# Query a specific block (replace 0x3e8 with a block number from your synced range)
+*Query a specific block (replace 0x3e8 with a block number from your synced range)*
+```
 Invoke-RestMethod -Uri http://localhost:8545 -Method POST -ContentType "application/json" -Body '{"jsonrpc":"2.0","method":"eth_getBlockByNumber","params":["0x3e8", true],"id":1}'
-
-# Query genesis block (always available)
+```
+*Query genesis block (always available)*
+```
 Invoke-RestMethod -Uri http://localhost:8545 -Method POST -ContentType "application/json" -Body '{"jsonrpc":"2.0","method":"eth_getBlockByNumber","params":["0x0", true],"id":1}'
 ```
 
