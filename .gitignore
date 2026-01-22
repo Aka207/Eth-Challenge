@@ -1,0 +1,17 @@
+# System Files
+.DS_Store
+Thumbs.db
+
+# Blockchain Data (Do NOT commit heavy archive data)
+data/
+data/geth/
+data/prysm/
+data/validator/
+
+# Secrets (Security)
+config/jwt.hex
+config/wallet-password.txt
+
+# IDE & Editor
+.vscode/
+.idea/
