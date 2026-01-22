@@ -32,8 +32,9 @@ docker-compose logs -f beacon
 *Wait for "Synced new block" logs in the beacon chain and "Chain head was updated" in Geth.*
 
 **Test the Node:**
-```bash
+
 # Query account balance via JSON-RPC
+```bash
 curl -X POST -H "Content-Type: application/json" \
   --data '{"jsonrpc":"2.0","method":"eth_getBalance","params":["0x123463a4b065722e99115d6c222f267d9cabb524", "0x0"],"id":1}' \
   http://localhost:8545
