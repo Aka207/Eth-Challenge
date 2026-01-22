@@ -50,7 +50,7 @@ curl -X POST -H "Content-Type: application/json" --data '{"jsonrpc":"2.0","metho
 
 # Windows PowerShell
 Invoke-RestMethod -Uri http://localhost:8545 -Method POST -ContentType "application/json" -Body '{"jsonrpc":"2.0","method":"eth_syncing","params":[],"id":1}'
-
+```
 
 *Note: The result is returned in hex format (wei). To convert to ETH, divide by 10^18.*
 
