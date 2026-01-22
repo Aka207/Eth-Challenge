@@ -20,7 +20,7 @@ This setup runs a full Ethereum mainnet archive node with complete historical da
 **Prerequisites:**
 *   Docker & Docker Compose
 *   `curl` (for testing)
-*   **Minimum 2TB SSD** for full archive node (sync can take days/weeks)
+*   **Minimum 16TB SSD** for full archive node (sync can take days/weeks)
 *   **16GB+ RAM** recommended
 
 **Launch the Archive Node:**
@@ -37,7 +37,7 @@ docker-compose logs -f prysm
 
 **Important Notes:**
 *   **Initial sync takes days/weeks** - The node will download the entire Ethereum blockchain history
-*   **Archive mode requires ~2-3TB** of disk space
+*   **Archive mode requires ~14-16TB** of disk space
 *   **Monitor sync progress** using `eth_syncing` JSON-RPC call
 *   The node will be fully functional once synced, but queries work during sync
 

@@ -58,7 +58,7 @@ services:
   init-jwt:
     image: alpine:latest
     command: >
-      /bin/sh -c "apk add --no-cache openssl && mkdir -p /data && if [ ! -f /data/jwt.hex ] && [ ! -d /data/jwt.hex ]; then echo 'Generating JWT...'; openssl rand -hex 32 > /data/jwt.hex; fi && echo 'JWT setup complete'"
+      /bin/sh -c "apk add --no-cache openssl && mkdir -p /data && if [ -d /data/jwt.hex ]; then echo 'Removing jwt.hex directory...'; rm -rf /data/jwt.hex; fi && if [ ! -f /data/jwt.hex ]; then echo 'Generating JWT...'; openssl rand -hex 32 > /data/jwt.hex; else echo 'JWT file already exists'; fi && echo 'JWT setup complete'"
     volumes:
       - ./data/geth:/data
 
