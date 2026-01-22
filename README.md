@@ -50,29 +50,7 @@ curl -X POST -H "Content-Type: application/json" --data '{"jsonrpc":"2.0","metho
 
 # Windows PowerShell
 Invoke-RestMethod -Uri http://localhost:8545 -Method POST -ContentType "application/json" -Body '{"jsonrpc":"2.0","method":"eth_syncing","params":[],"id":1}'
-```
 
-*Query Account Balance (Example: Vitalik's address):*
-
-*Linux/Mac (bash):*
-```bash
-# Query account balance via JSON-RPC (returns hex value in wei)
-# Uses "latest" which means the highest block your node has synced so far
-curl -X POST -H "Content-Type: application/json" --data '{"jsonrpc":"2.0","method":"eth_getBalance","params":["0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045", "latest"],"id":1}' http://localhost:8545
-
-# Convert hex balance to readable ETH
-curl -X POST -H "Content-Type: application/json" --data '{"jsonrpc":"2.0","method":"eth_getBalance","params":["0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045", "latest"],"id":1}' http://localhost:8545 | python3 -c "import sys, json; result = json.load(sys.stdin)['result']; print(f'Balance: {int(result, 16) / 10**18} ETH')"
-```
-
-*Windows PowerShell:*
-```powershell
-# Query account balance via JSON-RPC (returns hex value in wei)
-# Uses "latest" which means the highest block your node has synced so far
-Invoke-RestMethod -Uri http://localhost:8545 -Method POST -ContentType "application/json" -Body '{"jsonrpc":"2.0","method":"eth_getBalance","params":["0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045", "latest"],"id":1}'
-
-# Convert hex balance to readable ETH
-$response = Invoke-RestMethod -Uri http://localhost:8545 -Method POST -ContentType "application/json" -Body '{"jsonrpc":"2.0","method":"eth_getBalance","params":["0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045", "latest"],"id":1}'; $hex = $response.result -replace '^0x', ''; $balance = [System.Numerics.BigInteger]::Parse($hex, [System.Globalization.NumberStyles]::AllowHexSpecifier) / [System.Numerics.BigInteger]::Parse('1000000000000000000'); Write-Host "Balance: $balance ETH"
-```
 
 *Note: The result is returned in hex format (wei). To convert to ETH, divide by 10^18.*
 
@@ -179,26 +157,6 @@ Invoke-RestMethod -Uri http://localhost:8545 -Method POST -ContentType "applicat
 
 *Note: Use `"latest"` for the current block, `"0x0"` for genesis block, or any hex block number within your synced range (check Grafana first!).*
 
-### Example: Query Token Balance at Historical Block
-
-**What was the token balance at a specific historical block?**
-
-*Linux/Mac (bash):*
-```bash
-# Query contract storage at a specific block
-# Replace BLOCK_NUMBER with a hex block number within your synced range
-# Example: Query USDC balance at block 1000 (0x3e8)
-curl -X POST http://localhost:8545 -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"eth_getStorageAt","params":["0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", "0x0", "0x3e8"],"id":1}'
-```
-
-*Windows PowerShell:*
-```powershell
-# Query contract storage at a specific block
-# Replace BLOCK_NUMBER with a hex block number within your synced range
-Invoke-RestMethod -Uri http://localhost:8545 -Method POST -ContentType "application/json" -Body '{"jsonrpc":"2.0","method":"eth_getStorageAt","params":["0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", "0x0", "0x3e8"],"id":1}'
-```
-
-*Note: This queries contract storage. For ERC-20 token balances, you typically need to call the contract's `balanceOf` function, not direct storage access.*
 
 ## Step 3: Verify Archive Mode (Query Any Historical Block)
 
@@ -228,8 +186,6 @@ Invoke-RestMethod -Uri http://localhost:8545 -Method POST -ContentType "applicat
 - Archive nodes can query any block instantly, but you can only query blocks that have been synced
 - Use `"latest"` to query the most recent synced block
 
-
-**Note:** On Ethereum mainnet, blocks are produced every 12 seconds. The archive node stores complete historical state, allowing queries to any block from genesis to the latest block.
 
 ---
 # References & Inspiration
